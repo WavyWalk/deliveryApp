@@ -44,4 +44,14 @@ export class FulfillmentInformationState extends SubscriptionState {
     const state = this.shipmentOrderFulfillment.currentState
     return senderSteps.findIndex((it) => it.key === state)
   }
+
+  getTimestampForStep = (step: FULFILLMENT_STATE) => {
+    const timeStamp = this.shipmentOrderFulfillment.fulfillmentEvents.find(
+      (it) => it.fulfillmentState === step
+    )?.timestamp
+    if (!timeStamp) {
+      return
+    }
+    return new Date(timeStamp).toISOString()
+  }
 }

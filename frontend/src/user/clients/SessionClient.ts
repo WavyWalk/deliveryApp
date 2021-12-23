@@ -6,11 +6,16 @@ export class SessionClient {
   login = async (authenticationData: AuthenticationData) => {
     const payload = authenticationData.serialize()
     const response = await axios.post<User>('/api/sessions', payload)
-    return new AuthenticationData(response.data)
+    return new User(response.data)
   }
 
   getLoggedInUserDetails = async () => {
     const response = await axios.get<User>('/api/sessions')
+    return new User(response.data)
+  }
+
+  logout = async () => {
+    const response = await axios.delete<User>('/api/sessions')
     return new User(response.data)
   }
 }

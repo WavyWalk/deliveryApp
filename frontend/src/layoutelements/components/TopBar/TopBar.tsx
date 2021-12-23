@@ -4,11 +4,13 @@ import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
 import * as React from 'react'
+import { TopBarLoginInfo } from '../../../user/components/TopBarLoginInfo/TopBarLoginInfo'
+import { Box } from '@mui/material'
 
-const DelivererTopBar: FC<{
+const TopBar: FC<{
   sideBarWidth: number
   onSideBarToggle: () => void
-}> = ({ sideBarWidth, onSideBarToggle }) => {
+}> = ({ sideBarWidth, onSideBarToggle, children }) => {
   return (
     <AppBar
       position="fixed"
@@ -27,9 +29,13 @@ const DelivererTopBar: FC<{
         >
           <MenuIcon />
         </IconButton>
+        <Box sx={{ marginLeft: 'auto' }}>
+          <TopBarLoginInfo />
+        </Box>
+        {children}
       </Toolbar>
     </AppBar>
   )
 }
 
-export { DelivererTopBar }
+export { TopBar }

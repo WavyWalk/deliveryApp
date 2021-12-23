@@ -1,8 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import {
   CREATE_SHIPMENT_STEP,
-  CreateShipmentOrderFormState,
-  createShipmentOrderFormState
+  CreateShipmentOrderFormState
 } from './CreateShipmentOrderFormState'
 import {
   Box,
@@ -90,7 +89,7 @@ const CurrentStepContent: FC<{ formState: CreateShipmentOrderFormState }> = ({
 }
 
 const CreateShipmentOrder: FC = () => {
-  const formState = createShipmentOrderFormState.use()
+  const formState = useMemo(() => new CreateShipmentOrderFormState(), []).use()
   const completedSteps = formState.completedSteps()
 
   return (

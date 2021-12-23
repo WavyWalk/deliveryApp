@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { AddressDetails } from '../../../../address/components/ShowAddressDetails'
 import { senderSteps } from '../../sender/FulfillmentInformation/FulfillmentInformationState'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { FULFILLMENT_STATE } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
 import { DelivererShipmentOrderListItemState } from './DelivererShipmentOrderListItemState'
 
@@ -24,6 +24,8 @@ const DelivererShipmentOrderListItem: FC<{ shipmentOrder: ShipmentOrder }> = ({
   const destinationAddress = shipmentOrder.destinationAddress!
   const receiver = shipmentOrder.receiver!
   const fulfillment = shipmentOrder.fulfillment!
+
+  const navigate = useNavigate()
 
   const state = useMemo(
     () => new DelivererShipmentOrderListItemState(fulfillment),
@@ -96,7 +98,7 @@ const DelivererShipmentOrderListItem: FC<{ shipmentOrder: ShipmentOrder }> = ({
             <Divider />
             <Box
               sx={{ display: 'flex', justifyContent: 'center', margin: 1.5 }}
-              onClick={state.acceptOrder}
+              onClick={() => state.acceptOrder(navigate, shipmentOrder._id!)}
             >
               <Button variant={'contained'}>Accept this order</Button>
             </Box>

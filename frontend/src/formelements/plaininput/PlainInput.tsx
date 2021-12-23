@@ -11,12 +11,14 @@ const PlainInput = ({
   type,
   inputProps,
   sx,
-  required
+  required,
+  additionallyOnChange
 }: IFormInputProps & {
   label?: string
   type?: React.InputHTMLAttributes<unknown>['type']
   inputProps?: InputProps
   required?: boolean
+  additionallyOnChange?: () => void
 }) => {
   formState.use()
   const value = (model as any)[property]
@@ -34,6 +36,7 @@ const PlainInput = ({
       onChange={(e) => {
         ;(model as any)[property] = e.target.value
         validateFunc?.()
+        additionallyOnChange?.()
         formState.update()
       }}
       InputProps={inputProps}

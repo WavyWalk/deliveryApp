@@ -60,5 +60,3 @@ export class CreateAccountFormState extends SubscriptionState {
     }
   }
 }
-
-export const createAccountFormState = new CreateAccountFormState()

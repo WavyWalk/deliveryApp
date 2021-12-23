@@ -28,6 +28,13 @@ export class LoginFormState extends SubscriptionState {
     this.update()
   }
 
+  clearGeneralError = () => {
+    this.authenticationData.validator.removeErrors(
+      'general' as keyof AuthenticationData
+    )
+    this.update()
+  }
+
   submit = async (navigateFunc: NavigateFunction) => {
     this.authenticationData.validator.validateLogin()
     if (!this.authenticationData.validator.isValid()) {
@@ -37,11 +44,12 @@ export class LoginFormState extends SubscriptionState {
 
     try {
       this.setSubmitting(true)
-      const responseData = await sessionClient.login(this.authenticationData)
-      if (!responseData.validator.isValid()) {
-        this.authenticationData.replaceErrorsFrom(responseData)
+      const responseUser = await sessionClient.login(this.authenticationData)
+      if (!responseUser.validator.isValid()) {
+        this.authenticationData.replaceErrorsFrom(responseUser)
         return
       }
+      sessionState.setCurrentUser(responseUser)
       sessionState.navigateToUsersHomePage(navigateFunc)
     } finally {
       this.setSubmitting(false)
@@ -49,5 +57,3 @@ export class LoginFormState extends SubscriptionState {
     this.update()
   }
 }
-
-export const loginFormState = new LoginFormState()

@@ -1,9 +1,7 @@
 import { SubscriptionState } from '../../../../lib/statemanagement'
-import {
-  FULFILLMENT_STATE,
-  ShipmentOrderFulfillment
-} from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
+import { ShipmentOrderFulfillment } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
 import { orderFulfillmentClient } from '../../../client/OrderFulfillmentClient'
+import { NavigateFunction } from 'react-router-dom'
 
 export class DelivererShipmentOrderListItemState extends SubscriptionState {
   isLoading = false
@@ -17,13 +15,17 @@ export class DelivererShipmentOrderListItemState extends SubscriptionState {
     this.update()
   }
 
-  acceptOrder = async () => {
+  acceptOrder = async (navigate: NavigateFunction, shipmentOrderId: string) => {
     try {
       this.setIsLoading(true)
-      await orderFulfillmentClient.updateFulfillmentState(
-        this.shipmentOrderFulfillment._id!,
-        FULFILLMENT_STATE.ACCEPTED_FOR_FULFILLMENT
-      )
+      const updatedShipmentOrder =
+        await orderFulfillmentClient.acceptForDeliverer(
+          this.shipmentOrderFulfillment._id!
+        )
+      this.shipmentOrderFulfillment.modelData =
+        updatedShipmentOrder.fulfillment!.modelData
+      navigate(`/deliverer/shipments/${shipmentOrderId}`)
+      this.update()
     } finally {
       this.setIsLoading(false)
     }

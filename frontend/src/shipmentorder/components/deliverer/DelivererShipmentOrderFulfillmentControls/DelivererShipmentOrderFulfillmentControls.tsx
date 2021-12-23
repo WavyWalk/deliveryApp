@@ -13,6 +13,7 @@ import {
 import { PlainSelect } from '../../../../formelements/plainselect/PlainSelect'
 import { nameOf } from '../../../../lib/typeutils/asKeyOf'
 import { DelivererShipmentOrderFulfillmentControlsState } from './DelivererShipmentOrderFulfillmentControlsState'
+import { useNavigate } from 'react-router-dom'
 
 export const DelivererShipmentOrderFulfillmentControls: FC<{
   fulfillment: ShipmentOrderFulfillment
@@ -24,12 +25,16 @@ export const DelivererShipmentOrderFulfillmentControls: FC<{
 
   const currentState = state.fulfillment.currentState
   const theme = useTheme()
-
+  const navigate = useNavigate()
   return (
     <Box>
       {currentState === FULFILLMENT_STATE.NEW_UNPROCESSED ? (
         <Box>
-          <Button variant={'contained'} disabled={!!state.isLoadingForStep}>
+          <Button
+            variant={'contained'}
+            disabled={!!state.isLoadingForStep}
+            onClick={() => state.acceptForDelivery(navigate)}
+          >
             ACCEPT FOR FULFILLMENT
           </Button>
         </Box>

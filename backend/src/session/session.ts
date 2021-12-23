@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { IUser } from '../user/model/User'
+import { userRepo_findById } from '../user/repository/userRepo'
 
 const getSecret = () => {
   return 'SECRETFROMENV'
@@ -16,6 +17,14 @@ export const session_createSession = async (res: Response, user: IUser, roles: s
     httpOnly: true,
     expires: new Date(Date.now() + 3600000 * 24 * 200),
   })
+}
+
+export const session_findCurrentUser = async (req: Request) => {
+  const userData = await session_getCurrentUserDataFromToken(req)
+  if (!userData) {
+    return
+  }
+  return await userRepo_findById(userData._id!)
 }
 
 export const session_getCurrentUserDataFromToken = async (req: Request): Promise<IUser | null> => {
@@ -34,7 +43,6 @@ export const session_getCurrentUserDataFromToken = async (req: Request): Promise
           reject()
           return
         }
-        console.log({ decoded })
         resolve(decoded)
       })
     })

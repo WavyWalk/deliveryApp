@@ -22,6 +22,7 @@ export const CreateAccountDelivererFields: FC<{
           label={'first name'}
           model={personalData}
           formState={formState}
+          validateFunc={personalData.validator.firstName}
           property={nameOf<PersonalData>('firstName')}
         />
       </Box>
@@ -32,6 +33,7 @@ export const CreateAccountDelivererFields: FC<{
           label={'last name'}
           model={personalData}
           formState={formState}
+          validateFunc={personalData.validator.lastName}
           property={nameOf<PersonalData>('lastName')}
         />
       </Box>
@@ -42,6 +44,7 @@ export const CreateAccountDelivererFields: FC<{
           label={'phone number'}
           model={personalData}
           formState={formState}
+          validateFunc={personalData.validator.contactPhone}
           property={nameOf<PersonalData>('contactPhone')}
         />
       </Box>

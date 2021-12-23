@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   Link,
   Typography
 } from '@mui/material'
-import { createAccountFormState } from './CreateAccountFormState'
+import { CreateAccountFormState } from './CreateAccountFormState'
 import { PlainInput } from '../../../formelements/plaininput/PlainInput'
 import { asKeyOf } from '../../../lib/typeutils/asKeyOf'
 import Visibility from '@mui/icons-material/Visibility'
@@ -21,7 +21,7 @@ import { CreateAccountDelivererFields } from './CreateAccountDelivererFields'
 import { AuthenticationData } from '../../model/authenticationdata/AuthenticationData'
 
 const CreateAccount = () => {
-  const formState = createAccountFormState.use()
+  const formState = useMemo(() => new CreateAccountFormState(), []).use()
   const navigate = useNavigate()
   const authenticationData = formState.user.authenticationData!
   const sx = useCreateAccountSxStyles()

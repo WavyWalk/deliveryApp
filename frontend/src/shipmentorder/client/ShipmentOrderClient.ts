@@ -1,6 +1,5 @@
 import { ShipmentOrder } from '../model/ShipmentOrder'
 import axios from 'axios'
-import { mocks_makeShipmentOrderCreateResult } from '../../devutils/mocks'
 
 class ShipmentOrderClient {
   createShipmentOrder = async (shipmentOrder: ShipmentOrder) => {
@@ -10,13 +9,33 @@ class ShipmentOrderClient {
   }
 
   getShipmentOrder = async (shipmentOrderId: string) => {
-    return mocks_makeShipmentOrderCreateResult()
     const response = await axios.get(`/api/shipmentOrders/${shipmentOrderId}`)
     return new ShipmentOrder(response.data)
   }
 
-  getShipmentOrdersForCustomer = async (customerId: string) => {
-    return Array(10).fill(mocks_makeShipmentOrderCreateResult())
+  getShipmentOrdersForCustomer = async ({
+    filterFulfillmentState
+  }: {
+    filterFulfillmentState?: string
+  }) => {
+    const query = `?filterFulfillmentState=${filterFulfillmentState}`
+
+    const response = await axios.get<ShipmentOrder[]>(
+      `/api/shipmentOrders/customer${query}`
+    )
+    return response.data.map((it) => new ShipmentOrder(it))
+  }
+
+  getShipmentOrdersForDeliverer = async ({
+    filterFulfillmentState
+  }: {
+    filterFulfillmentState?: string
+  }) => {
+    const query = `?filterFulfillmentState=${filterFulfillmentState}`
+    const response = await axios.get<ShipmentOrder[]>(
+      `/api/shipmentOrders/deliverer${query}`
+    )
+    return response.data.map((it) => new ShipmentOrder(it))
   }
 }
 

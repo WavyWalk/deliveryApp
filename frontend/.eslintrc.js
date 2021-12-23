@@ -23,6 +23,7 @@ module.exports = {
     camelcase: 'off',
     'no-void': 'off',
     'brace-style': 'off',
-    'react/no-unescaped-entities': 'off'
+    'react/no-unescaped-entities': 'off',
+    indent: 'off'
   }
 }

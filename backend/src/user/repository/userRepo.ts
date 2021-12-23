@@ -10,7 +10,7 @@ export const userRepo_create = async (user: IUser) => {
 
 export const userRepo_findByAuthenticationData = async (authenticationDataId: string) => {
   return userTable.findOne({
-    authenticationData: { _id: new mongoose.Types.ObjectId(authenticationDataId) },
+    'authenticationData._id': authenticationDataId,
   })
 }
 

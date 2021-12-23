@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { ShipmentOrder } from '../../model/ShipmentOrder'
+import { ShipmentOrder } from '../../../model/ShipmentOrder'
 import { Box, Button, Card, CardContent, Link, Typography } from '@mui/material'
-import { AddressDetails } from '../../../address/components/ShowAddressDetails'
-import { senderSteps } from './FulfillmentInformation/FulfillmentInformationState'
+import { AddressDetails } from '../../../../address/components/ShowAddressDetails'
+import { senderSteps } from '../FulfillmentInformation/FulfillmentInformationState'
 import { Link as RouterLink } from 'react-router-dom'
 
 const SenderShipmentOrderListItem: FC<{ shipmentOrder: ShipmentOrder }> = ({

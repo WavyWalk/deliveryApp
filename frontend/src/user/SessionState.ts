@@ -14,6 +14,11 @@ export class SessionState extends SubscriptionState {
     void this.fetchCurrentUser()
   }
 
+  setCurrentUser = (currentUser?: User) => {
+    this.currentUser = currentUser
+    this.update()
+  }
+
   isCurrentUserSender = () => {
     return this.currentUser?.roles?.find((it) => it === UserRole.SENDER)
   }
@@ -29,6 +34,15 @@ export class SessionState extends SubscriptionState {
   setLoading = (value: boolean) => {
     this.isLoading = value
     this.update()
+  }
+
+  logout = async (navigateFunc: NavigateFunction) => {
+    if (!this.currentUser || this.isCurrentUserGuest()) {
+      return
+    }
+    this.currentUser = await sessionClient.logout()
+    this.update()
+    navigateFunc('/login')
   }
 
   fetchCurrentUser = async () => {

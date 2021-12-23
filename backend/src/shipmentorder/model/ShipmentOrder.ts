@@ -4,9 +4,9 @@ import { IAddressee } from '../../addressee/model/Addressee'
 import { IUser, User } from '../../user/model/User'
 import {
   IShipmentOrderFulfillment,
-  ShipmentOrderFulfillment
+  ShipmentOrderFulfillment,
 } from '../../orderfullfillment/model/ShipmentOrderFulfillment'
-import {prop} from "@typegoose/typegoose";
+import { prop } from '@typegoose/typegoose'
 
 export interface IShipmentOrder {
   id?: string
@@ -17,7 +17,7 @@ export interface IShipmentOrder {
   destinationAddress?: IAddress
   originAddress?: IAddress
   shipmentDetails?: IShipmentDetails
-  user?: IUser
+  customer?: IUser
   fulfillment?: IShipmentOrderFulfillment
 }
 
@@ -43,10 +43,11 @@ export class ShipmentOrder {
   @prop()
   shipmentDetails?: IShipmentDetails
 
-  @prop({type: () => User})
+  @prop({ type: () => User })
   customer?: User
 
-  @prop({type: () => ShipmentOrderFulfillment})
+  @prop({ type: () => ShipmentOrderFulfillment })
   fulfillment?: ShipmentOrderFulfillment
 
+  save!: () => Promise<this>
 }

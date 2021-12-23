@@ -1,14 +1,10 @@
 import { SubscriptionState } from '../../../lib/statemanagement'
 import { IShipmentOrder, ShipmentOrder } from '../../model/ShipmentOrder'
 import { Address } from '../../../address/model/Address'
-import {
-  availableParcels,
-  handlingLabels,
-  IShipmentDetails,
-  ShipmentDetails
-} from '../../model/ShipmentDetails'
+import { IShipmentDetails, ShipmentDetails } from '../../model/ShipmentDetails'
 import { Addressee } from '../../../addressee/model/Addressee'
 import { NavigateFunction } from 'react-router-dom'
+import { shipmentOrderClient } from '../../client/ShipmentOrderClient'
 
 export enum CREATE_SHIPMENT_STEP {
   SENDER = 'sender',
@@ -38,10 +34,7 @@ export class CreateShipmentOrderFormState extends SubscriptionState {
 
   verificationDialogIsOpen = false
 
-  setVerificationDialogIsOpen = (value: boolean) => {
-    this.verificationDialogIsOpen = value
-    this.update()
-  }
+  isLoading = false
 
   constructor() {
     super()
@@ -57,6 +50,16 @@ export class CreateShipmentOrderFormState extends SubscriptionState {
       shipmentDetails: new ShipmentDetails(defaultShipmentDetailsData)
     }
     this.shipmentOrder = new ShipmentOrder(initialData)
+  }
+
+  setVerificationDialogIsOpen = (value: boolean) => {
+    this.verificationDialogIsOpen = value
+    this.update()
+  }
+
+  setIsLoading = (value: boolean) => {
+    this.isLoading = value
+    this.update()
   }
 
   completedSteps = () => {
@@ -107,8 +110,14 @@ export class CreateShipmentOrderFormState extends SubscriptionState {
   }
 
   submit = async (navigate: NavigateFunction) => {
-    console.log(this.shipmentOrder.serialize())
-    navigate('/sender/shipments/asdasd121asf1r')
+    try {
+      this.setIsLoading(true)
+      const createdShipmentOrder =
+        await shipmentOrderClient.createShipmentOrder(this.shipmentOrder)
+      navigate(`/sender/shipments/${createdShipmentOrder._id}`)
+    } finally {
+      this.setIsLoading(false)
+    }
   }
 
   allStepsCompleted = () => {

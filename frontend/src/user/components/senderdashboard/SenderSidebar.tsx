@@ -1,7 +1,4 @@
 import { FC } from 'react'
-import Toolbar from '@mui/material/Toolbar'
-import Divider from '@mui/material/Divider'
-import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
@@ -10,7 +7,7 @@ import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import { Link } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import ListAltIcon from '@mui/icons-material/ListAlt'
-import { SlidableSidebar } from '../components/SlidableSidbar'
+import { SlidableSidebar } from '../../../layoutelements/components/SlidableSidebar/SlidableSidbar'
 
 const sideBarItems = [
   {

@@ -27,7 +27,9 @@ const FulfillmentInformation: FC<{
           {state.steps.map((step, index) => {
             return (
               <Step key={step.key} completed={state.currentStepIndex >= index}>
-                <StepLabel>{step.name}</StepLabel>
+                <StepLabel>
+                  {state.getTimestampForStep(step.key)} {step.name}
+                </StepLabel>
               </Step>
             )
           })}

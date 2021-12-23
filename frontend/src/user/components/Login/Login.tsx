@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import {
   Box,
   Button,
@@ -13,13 +13,13 @@ import { PlainInput } from '../../../formelements/plaininput/PlainInput'
 import { asKeyOf } from '../../../lib/typeutils/asKeyOf'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { loginFormState } from './LoginFormState'
+import { LoginFormState } from './LoginFormState'
 import { useLoginSxStyles } from './UseLoginSxStyles'
 import { useNavigate } from 'react-router-dom'
 import { AuthenticationData } from '../../model/authenticationdata/AuthenticationData'
 
 const Login: FC = () => {
-  const formState = loginFormState.use()
+  const formState = useMemo(() => new LoginFormState(), []).use()
   const authenticationData = formState.authenticationData
   const sx = useLoginSxStyles()
   const navigateFunc = useNavigate()
@@ -37,6 +37,7 @@ const Login: FC = () => {
               label={'email'}
               sx={sx.textField}
               validateFunc={authenticationData.validator.email}
+              additionallyOnChange={formState.clearGeneralError}
             />
           </Box>
           <Box display={'flex'} flexDirection={'column'}>
@@ -48,6 +49,7 @@ const Login: FC = () => {
               property={asKeyOf<AuthenticationData>('password')}
               sx={sx.textField}
               validateFunc={authenticationData.validator.password}
+              additionallyOnChange={formState.clearGeneralError}
               inputProps={{
                 endAdornment: (
                   <IconButton onClick={formState.toggleShowPassword}>

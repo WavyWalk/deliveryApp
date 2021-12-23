@@ -1,13 +1,13 @@
 import { SubscriptionState } from '../../../../lib/statemanagement'
 import { ShipmentOrder } from '../../../model/ShipmentOrder'
-import { shipmentOrderClient } from '../../../client/ShipmentOrderClient'
 import { ShipmentOrderFulfillment } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
+import { shipmentOrderClient } from '../../../client/ShipmentOrderClient'
 
-export class DelivererShipmentOrderListState extends SubscriptionState {
+export class SenderShipmentOrderListState extends SubscriptionState {
   isLoading = false
 
   shipmentOrders: ShipmentOrder[] = []
-  noOrders: boolean = true
+  userHasOrders: boolean = true
 
   fulfillmentStateFilter = new ShipmentOrderFulfillment({
     currentState: 'NO_FILTER'
@@ -27,10 +27,10 @@ export class DelivererShipmentOrderListState extends SubscriptionState {
     try {
       this.setIsLoading(true)
       const shipmentOrders =
-        await shipmentOrderClient.getShipmentOrdersForDeliverer({
+        await shipmentOrderClient.getShipmentOrdersForCustomer({
           filterFulfillmentState: this.fulfillmentStateFilter.currentState
         })
-      this.noOrders = shipmentOrders.length > 0
+      this.userHasOrders = shipmentOrders.length > 0
       this.shipmentOrders = shipmentOrders
       this.update()
     } finally {

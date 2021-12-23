@@ -1,5 +1,5 @@
 export interface IFulfillmentEvent {
-  fulfillmentState?: string[]
+  fulfillmentState?: string
   humanReadable?: string
-  timestamp?: string
+  timestamp?: number
 }

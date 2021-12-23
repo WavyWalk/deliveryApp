@@ -13,7 +13,7 @@ export enum FULFILLMENT_STATE {
 export interface IShipmentOrderFulfillment {
   currentState?: `${FULFILLMENT_STATE}`
   fulfillmentEvents: IFulfillmentEvent[]
-  lastStateUpdatedAt?: string
+  lastStateUpdatedAt?: number
   deliveryAgent?: IUser
   _id?: string
 }
@@ -29,7 +29,7 @@ export class ShipmentOrderFulfillment
   currentState?: FULFILLMENT_STATE
 
   @Property
-  lastStateUpdatedAt?: string
+  lastStateUpdatedAt?: number
 
   @HasOne(() => User)
   deliveryAgent?: User

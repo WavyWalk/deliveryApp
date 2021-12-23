@@ -4,19 +4,19 @@ import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
 
 import Toolbar from '@mui/material/Toolbar'
-import { DelivererSidebar } from './DelivererSidebar'
-import { DelivererTopBar } from './DelivererTopBar'
-import { useSideBarControls } from '../hooks/useSidebarControls'
+import { SenderSidebar } from './SenderSidebar'
+import { SenderTopBar } from './SenderTopBar'
+import { useSideBarControls } from './hooks/useSidebarControls'
 import { Navigate, Outlet } from 'react-router-dom'
-import { sessionState } from '../../user/SessionState'
+import { sessionState } from '../../SessionState'
 
 const sidebarWidth = 250
 
-const DelivererDashboard: FC = () => {
+const SenderDashboard: FC = () => {
   const sidebarControls = useSideBarControls()
   const session = sessionState.use()
 
-  if (session.isCurrentUserDeliveryAgent()) {
+  if (!session.isCurrentUserSender()) {
     return (
       <>
         <Navigate to={'/403'} />
@@ -27,11 +27,11 @@ const DelivererDashboard: FC = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <DelivererTopBar
+      <SenderTopBar
         sideBarWidth={sidebarWidth}
         onSideBarToggle={sidebarControls.toggleSidebar}
       />
-      <DelivererSidebar
+      <SenderSidebar
         isMobileOpen={sidebarControls.isMobileOpen}
         sideBarWidth={sidebarWidth}
         onSideBarToggle={sidebarControls.toggleSidebar}
@@ -51,4 +51,4 @@ const DelivererDashboard: FC = () => {
   )
 }
 
-export { DelivererDashboard }
+export { SenderDashboard }

@@ -16,6 +16,7 @@ import {
   session_getCurrentUserDataFromToken,
   session_createSession,
   session_logout,
+  session_findCurrentUser,
 } from '../session'
 
 const getSanitizedLoginDataFromRequest = (req: Request) => {
@@ -25,6 +26,8 @@ const getSanitizedLoginDataFromRequest = (req: Request) => {
   }
   return authenticationData
 }
+
+const guestResponse = { roles: ['GUEST'] }
 
 export const sessionRequestHandlers_login = handleAsync(async (req, res) => {
   const authenticationRequestData = getSanitizedLoginDataFromRequest(req)
@@ -52,19 +55,15 @@ export const sessionRequestHandlers_login = handleAsync(async (req, res) => {
   res.send(fetchedUser.toObject())
 })
 
-const guestResponse = { roles: ['GUEST'] }
-
 export const sessionRequestHandlers_getCurrentUser = handleAsync(async (req, res) => {
-  const userData = await session_getCurrentUserDataFromToken(req)
-  console.log({ userData })
-  if (!userData) {
-    return res.send(guestResponse)
-  }
-  console.log({ userData })
-  const user = await userRepo_findById(userData._id!)
+  const user = await session_findCurrentUser(req)
   if (!user) {
-    session_logout(res)
     return res.send(guestResponse)
   }
   return res.send(user)
+})
+
+export const sessionRequestHandlers_logout = handleAsync(async (req, res) => {
+  session_logout(res)
+  res.send(guestResponse)
 })
