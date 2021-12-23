@@ -1,19 +1,17 @@
-import { AuthenticationData, User } from '../model/IUser'
+import { User } from '../model/User'
 import axios from 'axios'
-import { mockPromise } from '../../devutils/mockPromise'
-import { mocks_makeUserSender } from '../../devutils/mocks'
+import { AuthenticationData } from '../model/authenticationdata/AuthenticationData'
 
 export class SessionClient {
   login = async (authenticationData: AuthenticationData) => {
     const payload = authenticationData.serialize()
     const response = await axios.post<User>('/api/sessions', payload)
-    return new User(response.data)
+    return new AuthenticationData(response.data)
   }
 
   getLoggedInUserDetails = async () => {
-    // const response = await axios.get<User>('/api/sessions/currentUser')
-    // return response.data
-    return mockPromise(mocks_makeUserSender())
+    const response = await axios.get<User>('/api/sessions')
+    return new User(response.data)
   }
 }
 

@@ -7,12 +7,22 @@ import Toolbar from '@mui/material/Toolbar'
 import { SenderSidebar } from './SenderSidebar'
 import { SenderTopBar } from './SenderTopBar'
 import { useSideBarControls } from './hooks/useSidebarControls'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
+import { sessionState } from '../../user/SessionState'
 
 const sidebarWidth = 250
 
 const SenderDashboard: FC = () => {
   const sidebarControls = useSideBarControls()
+  const session = sessionState.use()
+
+  if (!session.isCurrentUserSender()) {
+    return (
+      <>
+        <Navigate to={'/403'} />
+      </>
+    )
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>

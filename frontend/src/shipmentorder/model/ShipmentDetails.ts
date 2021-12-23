@@ -1,5 +1,5 @@
-import { BaseModel, ModelValidator, Property } from '../../lib/frontmodel'
-import { validators_validateNotEmpty } from '../../modelvalidation/validators'
+import { BaseModel, Property } from '../../lib/frontmodel'
+import { ShipmentDetailsValidator } from './ShipmentDetailsValidator'
 
 export const availableParcels = {
   parcel2Kg: 'parcel 2 kg',
@@ -17,20 +17,6 @@ export interface IShipmentDetails {
   parcelType?: string
   safeHandlingLabel?: string
   noteToDeliveryAgent?: string
-}
-
-export class ShipmentDetailsValidator extends ModelValidator<
-  ShipmentDetails,
-  any
-> {
-  parcelType = () => {
-    validators_validateNotEmpty(this, 'parcelType')
-  }
-
-  validateShipmentCreate = () => {
-    this.parcelType()
-    return this.isValid()
-  }
 }
 
 export class ShipmentDetails extends BaseModel implements IShipmentDetails {

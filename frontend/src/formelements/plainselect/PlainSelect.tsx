@@ -27,11 +27,15 @@ const PlainSelect = ({
   model,
   selectPairs,
   label,
-  sx
+  sx,
+  disabled,
+  customSetter
 }: IFormInputProps & {
   selectPairs: SelectPairs[]
   label?: string
   sx?: SxProps
+  disabled?: boolean
+  customSetter?: (value: any) => void
 }) => {
   formState.use()
   const modelAsAny = model as any
@@ -46,12 +50,17 @@ const PlainSelect = ({
         error={!!error}
         labelId="demo-simple-select-helper-label"
         id="demo-simple-select-helper"
+        disabled={disabled}
         value={value ?? ''}
         label="Age"
         onChange={(e) => {
           const inputValue = e.target.value
           const selectedPair = findSelectPairByValue(selectPairs, inputValue)
-          modelAsAny[property] = selectedPair?.value
+          if (customSetter) {
+            customSetter(selectedPair?.value)
+          } else {
+            modelAsAny[property] = selectedPair?.value
+          }
           validateFunc?.()
           formState.update()
         }}

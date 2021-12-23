@@ -13,10 +13,10 @@ const HomePage = () => {
   return (
     <>
       <main>
-        {session.loading && <LinearProgress/>}
-        {session.isCurrentUserGuest() && <Navigate to={'/signUp'}/>}
-        {session.isCurrentUserSender() && <h1>sender</h1> }
-        {session.isCurrentUserDeliveryAgent() && <h1>delivery</h1>}
+        {session.isLoading && <LinearProgress />}
+        {session.isCurrentUserGuest() && <Navigate to={'/signUp'} />}
+        {session.isCurrentUserSender() && <Navigate to={'/sender'} />}
+        {session.isCurrentUserDeliveryAgent() && <Navigate to={'/deliverer'} />}
       </main>
     </>
   )

@@ -1,6 +1,6 @@
-import { App } from "./App";
-import path from "path";
+import { app } from './App'
+import path from 'path'
 
-export const PROJECT_DIR = path.resolve(__dirname, "../");
+export const PROJECT_DIR = path.resolve(__dirname, '../')
 
-App.init();
+void app.init()

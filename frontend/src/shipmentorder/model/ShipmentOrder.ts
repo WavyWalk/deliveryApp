@@ -1,30 +1,41 @@
-import { Addressee, IAddressee } from '../../actor/Sender'
 import { Address, IAddress } from '../../address/model/Address'
 import { BaseModel, HasOne, Property } from '../../lib/frontmodel'
 import { IShipmentDetails, ShipmentDetails } from './ShipmentDetails'
+import { Addressee, IAddressee } from '../../addressee/model/Addressee'
+import { IUser, User } from '../../user/model/User'
+import {
+  IShipmentOrderFulfillment,
+  ShipmentOrderFulfillment
+} from '../../orderfullfillment/model/ShipmentOrderFulfillment'
 
 export interface IShipmentOrder {
+  id?: string
+  orderNumber?: string
   userId?: string
   sender?: IAddressee
   receiver?: IAddressee
   destinationAddress?: IAddress
   originAddress?: IAddress
   shipmentDetails?: IShipmentDetails
-  noteToDeliverer?: string
+  user?: IUser
+  fulfillment?: IShipmentOrderFulfillment
 }
 
 export class ShipmentOrder extends BaseModel implements IShipmentOrder {
   @Property
+  _id?: string
+
+  @Property
+  orderNumber?: string
+
+  @Property
   userId?: string
 
-  @Property
+  @HasOne(() => Addressee)
   sender?: Addressee
 
-  @Property
+  @HasOne(() => Addressee)
   receiver?: Addressee
-
-  @Property
-  noteToDeliverer?: string
 
   @HasOne(() => Address)
   destinationAddress?: Address
@@ -34,4 +45,10 @@ export class ShipmentOrder extends BaseModel implements IShipmentOrder {
 
   @HasOne(() => ShipmentDetails)
   shipmentDetails?: ShipmentDetails
+
+  @HasOne(() => User)
+  customer?: User
+
+  @HasOne(() => ShipmentOrderFulfillment)
+  fulfillment?: ShipmentOrderFulfillment
 }

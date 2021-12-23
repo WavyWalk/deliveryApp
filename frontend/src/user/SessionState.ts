@@ -1,26 +1,33 @@
-import { User } from './model/IUser'
+import { User } from './model/User'
 import { sessionClient } from './clients/SessionClient'
 import { SubscriptionState } from '../lib/statemanagement'
 import { UserRole } from './model/UserRole'
+import { NavigateFunction } from 'react-router-dom'
 
-class SessionState extends SubscriptionState {
+export class SessionState extends SubscriptionState {
+  userFetched = false
   currentUser?: User
-  loading: boolean = false
+  isLoading = false
+
+  constructor() {
+    super()
+    void this.fetchCurrentUser()
+  }
 
   isCurrentUserSender = () => {
-    return (this.currentUser?.roles?.find((it) => it === UserRole.SENDER))
+    return this.currentUser?.roles?.find((it) => it === UserRole.SENDER)
   }
 
   isCurrentUserDeliveryAgent = () => {
-    return (this.currentUser?.roles?.find((it) => it === UserRole.DELIVERY_AGENT))
+    return this.currentUser?.roles?.find((it) => it === UserRole.DELIVERY_AGENT)
   }
 
   isCurrentUserGuest = () => {
-    return (this.currentUser?.roles?.find((it) => it === UserRole.GUEST))
+    return this.currentUser?.roles?.find((it) => it === UserRole.GUEST)
   }
 
   setLoading = (value: boolean) => {
-    this.loading = value
+    this.isLoading = value
     this.update()
   }
 
@@ -28,10 +35,21 @@ class SessionState extends SubscriptionState {
     try {
       this.setLoading(true)
       this.currentUser = await sessionClient.getLoggedInUserDetails()
-      console.log('ok', this.currentUser)
+      this.userFetched = true
+      this.update()
     } finally {
       this.setLoading(false)
     }
+  }
+
+  navigateToUsersHomePage(navigateFunc: NavigateFunction) {
+    if (this.isCurrentUserGuest()) {
+      return navigateFunc('/signUp')
+    }
+    if (this.isCurrentUserDeliveryAgent()) {
+      return navigateFunc('/deliverer')
+    }
+    navigateFunc('/sender')
   }
 }
 

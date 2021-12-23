@@ -1,5 +1,8 @@
 import { BaseModel, ModelValidator, Property } from '../../lib/frontmodel'
-import { validators_validateNotEmpty } from '../../modelvalidation/validators'
+import {
+  validators_validateNotEmpty,
+  validators_validatePostalCode
+} from '../../modelvalidation/validators'
 
 export interface IAddress {
   country?: string
@@ -20,6 +23,9 @@ export class AddressValidator extends ModelValidator<Address, any> {
 
   postalCode = () => {
     validators_validateNotEmpty(this, 'postalCode')
+    if (this.validatable.postalCode) {
+      validators_validatePostalCode(this, 'postalCode')
+    }
   }
 
   streetNumber = () => {

@@ -37,3 +37,16 @@ export const validators_validatePhone = <T>(
     validator.addError(property, message)
   }
 }
+
+export const validators_validatePostalCode = <T>(
+  validator: ModelValidator<T, any>,
+  property: keyof T
+) => {
+  const message = 'Must be valid postal code'
+  const value = (validator.validatable as any)[property as any]
+  if (/^[0-9]{5}$/.test(value)) {
+    validator.removeErrors(property)
+  } else {
+    validator.addError(property, message)
+  }
+}

@@ -1,26 +1,39 @@
-import { DeliveryAgent } from '../../actor/DeliveryAgent'
+import { BaseModel, HasMany, HasOne, Property } from '../../lib/frontmodel'
+import { IUser, User } from '../../user/model/User'
+import { FulfillmentEvent, IFulfillmentEvent } from './FulfillmentEvent'
 
-export enum FulfillmentState {
+export enum FULFILLMENT_STATE {
   NEW_UNPROCESSED = 'NEW_UNPROCESSED',
   ACCEPTED_FOR_FULFILLMENT = 'ACCEPTED_FOR_FULFILLMENT',
-  AWAITS_AGENT = 'AWAITS_AGENT',
-  AGENT_ASSIGNED = 'AGENT_ASSIGNED',
-  WAITS_TO_BE_PICKED_UP = 'WAITS_TO_BE_PICKED_UP',
-  AGENT_ON_WAY_TO_PICKUP = 'AGENT_ON_WAY_TO_PICKUP',
-  PICKED_UP = 'PICKED_UP',
   ON_WAY_TO_DESTINATION = 'ON_WAY_TO_DESTINATION',
   DELIVERED = 'DELIVERED',
   DELIVERY_ATTEMPT_FAILED = 'DELIVERY_ATTEMPT_FAILED'
 }
 
-export interface FulfillmentEvent {
-  fulfillmentState: FulfillmentState[]
-  humanReadable: string
-  timestamp: string
+export interface IShipmentOrderFulfillment {
+  currentState?: `${FULFILLMENT_STATE}`
+  fulfillmentEvents: IFulfillmentEvent[]
+  lastStateUpdatedAt?: string
+  deliveryAgent?: IUser
+  _id?: string
 }
 
-export interface ShipmentOrderFulfillment {
-  currentState: FulfillmentState[]
-  fulfillmentEvents: FulfillmentEvent[]
-  agent: DeliveryAgent
+export class ShipmentOrderFulfillment
+  extends BaseModel
+  implements IShipmentOrderFulfillment
+{
+  @Property
+  _id?: string
+
+  @Property
+  currentState?: FULFILLMENT_STATE
+
+  @Property
+  lastStateUpdatedAt?: string
+
+  @HasOne(() => User)
+  deliveryAgent?: User
+
+  @HasMany(() => FulfillmentEvent)
+  fulfillmentEvents!: FulfillmentEvent[]
 }

@@ -21,6 +21,8 @@ module.exports = {
     'space-before-function-paren': 'off',
     'multiline-ternary': 'off',
     camelcase: 'off',
-    'no-void': 'off'
+    'no-void': 'off',
+    'brace-style': 'off',
+    'react/no-unescaped-entities': 'off'
   }
 }
