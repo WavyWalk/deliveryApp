@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
@@ -9,9 +9,11 @@ class AppManager {
   init = () => {
     ReactDOM.render(
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <App />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
+        </StyledEngineProvider>
       </BrowserRouter>,
       document.getElementById('app')
     )

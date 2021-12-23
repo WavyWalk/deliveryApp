@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import {
-  shipmentOrderFulfillmentRequestHandlers_acceptForDelivery,
-  shipmentOrderFulfillmentRequestHandlers_updateState,
-} from './requesthandlers/shipmentOrderFulfillmentRequestHandlers'
+import { shipmentOrderFulfillmentRequestHandlers_updateState } from './requesthandlers/shipmentOrderFulfillmentRequestHandlers_updateState'
+import { shipmentOrderFulfillmentRequestHandlers_acceptForDelivery } from './requesthandlers/shipmentOrderFulfillmentRequestHandlers_acceptForDelivery'
 
 export const orderFulfillmentRouter_build = () => {
   const router = Router({ mergeParams: true })

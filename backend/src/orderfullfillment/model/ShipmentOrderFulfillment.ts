@@ -19,6 +19,8 @@ export interface IShipmentOrderFulfillment {
 }
 
 export class ShipmentOrderFulfillment {
+  _id?: string
+
   @prop()
   currentState?: string
 

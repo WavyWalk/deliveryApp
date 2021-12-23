@@ -18,6 +18,7 @@ export class DelivererShipmentOrderListItemState extends SubscriptionState {
   acceptOrder = async (navigate: NavigateFunction, shipmentOrderId: string) => {
     try {
       this.setIsLoading(true)
+      console.log(this.shipmentOrderFulfillment)
       const updatedShipmentOrder =
         await orderFulfillmentClient.acceptForDeliverer(
           this.shipmentOrderFulfillment._id!

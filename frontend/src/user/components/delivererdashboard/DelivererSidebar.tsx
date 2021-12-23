@@ -3,28 +3,16 @@ import ListItem from '@mui/material/ListItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import * as React from 'react'
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike'
 import { Link } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { SlidableSidebar } from '../../../layoutelements/components/SlidableSidebar/SlidableSidbar'
 import PlaylistAddCircleIcon from '@mui/icons-material/PlaylistAddCircle'
-import PlaylistAddCheckCircleIcon from '@mui/icons-material/PlaylistAddCheckCircle'
 
 const sideBarItems = [
   {
-    text: 'Open shipments pool',
+    text: 'Shipments pool',
     link: '/deliverer',
     icon: <PlaylistAddCircleIcon />
-  },
-  {
-    text: 'my shipments in fulfillment',
-    link: '/deliverer',
-    icon: <DirectionsBikeIcon />
-  },
-  {
-    text: 'My completed shipments',
-    link: '/deliverer',
-    icon: <PlaylistAddCheckCircleIcon />
   }
 ]
 

@@ -14,6 +14,8 @@ export interface IUser {
 }
 
 export class User implements IUser {
+  _id?: string
+
   @prop({ type: () => AuthenticationData })
   authenticationData?: AuthenticationData
 

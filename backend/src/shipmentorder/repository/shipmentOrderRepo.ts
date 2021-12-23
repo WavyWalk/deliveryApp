@@ -40,16 +40,18 @@ export const shipmentOrderRepo_findForDelivererWithCurrentState = (
   delivererId: ObjectId,
   currentState: string
 ) => {
-  return shipmentOrderTable.find(
-    {
-      'fulfillment.currentState': FULFILLMENT_STATE.NEW_UNPROCESSED,
-      'fulfillment.deliveryAgent._id': delivererId,
-      currentState,
-    },
-    { lean: true }
-  )
+  return shipmentOrderTable.find({
+    'fulfillment.currentState': currentState,
+    'fulfillment.deliveryAgent._id': delivererId,
+  })
 }
 
 export const shipmentOrderRepo_save = async (shipmentOrder: ShipmentOrder) => {
   return await shipmentOrder.save()
+}
+
+export const shipmentOrderRepo_findAcceptedByDeliverer = async (delivererId: ObjectId) => {
+  return shipmentOrderTable.find({
+    'fulfillment.deliveryAgent._id': delivererId,
+  })
 }

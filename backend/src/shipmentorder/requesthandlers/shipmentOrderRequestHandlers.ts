@@ -8,6 +8,7 @@ import { session_findCurrentUser } from '../../session/session'
 import {
   shipmentOrderRepo_allOrdersForUser,
   shipmentOrderRepo_create,
+  shipmentOrderRepo_findAcceptedByDeliverer,
   shipmentOrderRepo_findAllOpen,
   shipmentOrderRepo_findById,
   shipmentOrderRepo_findForDelivererWithCurrentState,
@@ -53,6 +54,9 @@ export const shipmentOrderRequestHandlers_getForDeliverer = handleAsync(async (r
     return res.send(await shipmentOrderRepo_findAllOpen())
   }
   const deliverer = await session_findCurrentUser(req)
+  if (filterState === 'ACCEPTED_BY_DELIVERER') {
+    return res.send(await shipmentOrderRepo_findAcceptedByDeliverer(deliverer?._id))
+  }
   return res.send(
     await shipmentOrderRepo_findForDelivererWithCurrentState(deliverer?._id!, filterState)
   )
