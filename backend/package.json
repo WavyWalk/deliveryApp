@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "backend:start": "yarn nodemon ./src/index.ts",
+    "both:dev": "yarn backend:start & cd ../frontend && yarn webpack watch",
+    "startStage": "cd ../frontend && yarn build && yarn backend:start"
+  },
   "dependencies": {
     "@typegoose/typegoose": "^9.4.0",
     "@types/bcrypt": "^5.0.0",

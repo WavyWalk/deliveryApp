@@ -6,3 +6,5 @@
 /backend/public/dist
 /backend/.docker/
 /frontend/yarn-error.log
+/backend/public/index.html
+/backend/public/index.html.gz
