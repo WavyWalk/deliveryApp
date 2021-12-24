@@ -9,6 +9,13 @@ services:
       - 27017:27017
     volumes:
       - ./.docker/mongoVolume:/data/db
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./.docker/nginx:/etc/nginx/conf.d
 
 volumes:
   mongodb_data_container:
