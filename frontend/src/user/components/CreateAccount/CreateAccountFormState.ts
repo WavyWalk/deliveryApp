@@ -44,7 +44,6 @@ export class CreateAccountFormState extends SubscriptionState {
     this.user.authenticationData!.validator.validateCreateAccount()
     this.user.personalData?.validator?.validateAccountCreate()
     if (!this.user.validator.isValid()) {
-      console.log('invalid', this.user)
       this.update()
       return
     }
