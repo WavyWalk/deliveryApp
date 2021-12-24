@@ -23,7 +23,7 @@ export const sessionHandlers_login = handleAsync(async (req, res) => {
     authenticationRequestData.email!
   )
   if (!authenticationData) {
-    throw new RequestInvalidError()
+    return res.send({ errors: { general: ['invalid credentials'] } })
   }
   if (
     !(await passwordHasher_compare(
