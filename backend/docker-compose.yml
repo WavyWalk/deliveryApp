@@ -16,6 +16,7 @@ services:
       - "443:443"
     volumes:
       - ./.docker/nginx:/etc/nginx/conf.d
+      - ./backend/public:/delivery/public
     network_mode: host
 
 volumes:
