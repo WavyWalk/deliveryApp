@@ -1,7 +1,7 @@
 import { FULFILLMENT_STATE, ShipmentOrderFulfillment } from '../model/ShipmentOrderFulfillment'
 import { ShipmentOrder } from '../../shipmentorder/model/ShipmentOrder'
 import { User } from '../../user/model/User'
-import { RequestInvalidError } from '../../middleware/errors/RequestInvalidError'
+import { RequestInvalidError } from '../../errorhandling/errors/RequestInvalidError'
 import { Request } from 'express'
 import {
   shipmentOrderRepo_findByFulfillmentId,
@@ -54,16 +54,10 @@ const updatePropertiesForAcceptForDelivery = (
   })
 }
 
-export const shipmentOrderFulfillmentRequestHandlers_acceptForDelivery = handleAsync(
-  async (req, res) => {
-    const { shipmentOrder, fulfillment, deliveryAgent } = await fetchAndValidateData(req)
-
-    ensureDeliveryIsVacant(fulfillment, deliveryAgent)
-
-    updatePropertiesForAcceptForDelivery(fulfillment, shipmentOrder, deliveryAgent)
-
-    const updated = await shipmentOrderRepo_save(shipmentOrder)
-
-    return res.send(updated)
-  }
-)
+export const orderFulfillmentHandler_acceptForDelivery = handleAsync(async (req, res) => {
+  const { shipmentOrder, fulfillment, deliveryAgent } = await fetchAndValidateData(req)
+  ensureDeliveryIsVacant(fulfillment, deliveryAgent)
+  updatePropertiesForAcceptForDelivery(fulfillment, shipmentOrder, deliveryAgent)
+  const updated = await shipmentOrderRepo_save(shipmentOrder)
+  return res.send(updated)
+})

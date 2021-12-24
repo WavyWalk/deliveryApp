@@ -18,9 +18,9 @@ const apiRouter = () => {
 }
 
 export const router_setRoutes = (app: express.Application) => {
-  app.use('/', express.static(`./public/dist`))
+  app.use('/', express.static(`./public`))
   app.use('/api', apiRouter())
   app.get('*', (req, res) => {
-    res.sendFile(`${PROJECT_DIR}/public/dist/index.html`)
+    res.sendFile(`${PROJECT_DIR}/public/index.html`)
   })
 }

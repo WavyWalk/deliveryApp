@@ -1,16 +1,16 @@
 import { Router } from 'express'
 import {
-  shipmentOrderRequestHandlers_create,
-  shipmentOrderRequestHandlers_getById,
-  shipmentOrderRequestHandlers_getForCustomer,
-  shipmentOrderRequestHandlers_getForDeliverer,
-} from './requesthandlers/shipmentOrderRequestHandlers'
+  shipmentOrderHandlers_create,
+  shipmentOrderHandlers_getById,
+  shipmentOrderHandlers_getForCustomer,
+  shipmentOrderHandlers_getForDeliverer,
+} from './handlers/shipmentOrderHandlers'
 
 export const shipmentOrderRouter_build = () => {
   const router = Router({ mergeParams: true })
-  router.post('/', shipmentOrderRequestHandlers_create)
-  router.get('/customer', shipmentOrderRequestHandlers_getForCustomer)
-  router.get('/deliverer', shipmentOrderRequestHandlers_getForDeliverer)
-  router.get('/:id', shipmentOrderRequestHandlers_getById)
+  router.post('/', shipmentOrderHandlers_create)
+  router.get('/customer', shipmentOrderHandlers_getForCustomer)
+  router.get('/deliverer', shipmentOrderHandlers_getForDeliverer)
+  router.get('/:id', shipmentOrderHandlers_getById)
   return router
 }

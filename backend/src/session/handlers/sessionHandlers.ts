@@ -1,23 +1,11 @@
 import { handleAsync } from '../../lib/handleAsync'
 import { Request } from 'express'
-import { RequestInvalidError } from '../../middleware/errors/RequestInvalidError'
-import {
-  authenticationDataRepo_create,
-  authenticationDataRepo_findByEmail,
-} from '../../authenticationdata/repository/authenticationDataRepo'
+import { RequestInvalidError } from '../../errorhandling/errors/RequestInvalidError'
+import { authenticationDataRepo_findByEmail } from '../../authenticationdata/repository/authenticationDataRepo'
 import { IAuthenticationData } from '../../authenticationdata/model/AuthenticationData'
-import { passwordHasher } from '../../security/passwordHasher'
-import { userRequestHandlers_createUser } from '../../user/requesthandlers/userRequestHandlers'
-import {
-  userRepo_findByAuthenticationData,
-  userRepo_findById,
-} from '../../user/repository/userRepo'
-import {
-  session_getCurrentUserDataFromToken,
-  session_createSession,
-  session_logout,
-  session_findCurrentUser,
-} from '../session'
+import { userRepo_findByAuthenticationData } from '../../user/repository/userRepo'
+import { session_createSession, session_logout, session_findCurrentUser } from '../session'
+import { passwordHasher_compare } from '../../security/passwordHasher'
 
 const getSanitizedLoginDataFromRequest = (req: Request) => {
   const authenticationData: IAuthenticationData = req.body
@@ -29,7 +17,7 @@ const getSanitizedLoginDataFromRequest = (req: Request) => {
 
 const guestResponse = { roles: ['GUEST'] }
 
-export const sessionRequestHandlers_login = handleAsync(async (req, res) => {
+export const sessionHandlers_login = handleAsync(async (req, res) => {
   const authenticationRequestData = getSanitizedLoginDataFromRequest(req)
   const authenticationData = await authenticationDataRepo_findByEmail(
     authenticationRequestData.email!
@@ -38,7 +26,7 @@ export const sessionRequestHandlers_login = handleAsync(async (req, res) => {
     throw new RequestInvalidError()
   }
   if (
-    !(await passwordHasher.compare(
+    !(await passwordHasher_compare(
       authenticationRequestData.password!,
       authenticationData.password!
     ))
@@ -55,7 +43,7 @@ export const sessionRequestHandlers_login = handleAsync(async (req, res) => {
   res.send(fetchedUser.toObject())
 })
 
-export const sessionRequestHandlers_getCurrentUser = handleAsync(async (req, res) => {
+export const sessionHandlers_getCurrentUser = handleAsync(async (req, res) => {
   const user = await session_findCurrentUser(req)
   if (!user) {
     return res.send(guestResponse)
@@ -63,7 +51,7 @@ export const sessionRequestHandlers_getCurrentUser = handleAsync(async (req, res
   return res.send(user)
 })
 
-export const sessionRequestHandlers_logout = handleAsync(async (req, res) => {
+export const sessionHandlers_logout = handleAsync(async (req, res) => {
   session_logout(res)
   res.send(guestResponse)
 })

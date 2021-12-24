@@ -10,12 +10,13 @@ const config = {
   entry: './src/index.ts',
   output: {
     path: path.resolve(__dirname, '../backend/public/dist'),
-    publicPath: '/',
+    publicPath: '/dist',
     filename: isProduction ? '[name].[contenthash].js' : '[name].js'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: 'index.html',
+      filename: '../index.html'
     }),
     new CompressionPlugin()
     // new BundleAnalyzerPlugin()

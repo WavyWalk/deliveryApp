@@ -1,14 +1,14 @@
 import { Router } from 'express'
 import {
-  sessionRequestHandlers_getCurrentUser,
-  sessionRequestHandlers_login,
-  sessionRequestHandlers_logout,
-} from './requesthandlers/sessionRequestHandlers'
+  sessionHandlers_getCurrentUser,
+  sessionHandlers_login,
+  sessionHandlers_logout,
+} from './handlers/sessionHandlers'
 
 export const sessionsRouter_build = () => {
   const router = Router({ mergeParams: true })
-  router.post('/', sessionRequestHandlers_login)
-  router.get('/', sessionRequestHandlers_getCurrentUser)
-  router.delete('/', sessionRequestHandlers_logout)
+  router.post('/', sessionHandlers_login)
+  router.get('/', sessionHandlers_getCurrentUser)
+  router.delete('/', sessionHandlers_logout)
   return router
 }

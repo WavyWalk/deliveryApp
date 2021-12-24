@@ -25,7 +25,7 @@ const createBaseFulfillment = async () => {
   return fulfillmentData
 }
 
-export const shipmentOrderRequestHandlers_create = handleAsync(async (req, res) => {
+export const shipmentOrderHandlers_create = handleAsync(async (req, res) => {
   const shipmentOrder: IShipmentOrder = req.body
   shipmentOrder.fulfillment = (await createBaseFulfillment())!
   shipmentOrder.customer = (await session_findCurrentUser(req))!
@@ -33,14 +33,14 @@ export const shipmentOrderRequestHandlers_create = handleAsync(async (req, res) 
   res.send(createdShipmentOrder.toObject())
 })
 
-export const shipmentOrderRequestHandlers_getForCustomer = handleAsync(async (req, res) => {
+export const shipmentOrderHandlers_getForCustomer = handleAsync(async (req, res) => {
   const currentUser = await session_findCurrentUser(req)
   const currentState = req.query.filterFulfillmentState as string | undefined
   console.log({ currentState })
   res.send(await shipmentOrderRepo_allOrdersForUser(currentUser!._id, { currentState }))
 })
 
-export const shipmentOrderRequestHandlers_getById = handleAsync(async (req, res) => {
+export const shipmentOrderHandlers_getById = handleAsync(async (req, res) => {
   const shipmentOrder = await shipmentOrderRepo_findById(req.params.id)
   if (!shipmentOrder) {
     return res.sendStatus(404)
@@ -48,7 +48,7 @@ export const shipmentOrderRequestHandlers_getById = handleAsync(async (req, res)
   res.send(shipmentOrder.toObject())
 })
 
-export const shipmentOrderRequestHandlers_getForDeliverer = handleAsync(async (req, res) => {
+export const shipmentOrderHandlers_getForDeliverer = handleAsync(async (req, res) => {
   const filterState = req.query.filterFulfillmentState as string
   if (filterState === 'NO_FILTER') {
     return res.send(await shipmentOrderRepo_findAllOpen())

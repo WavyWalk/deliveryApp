@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { userRequestHandlers_createUser } from './requesthandlers/userRequestHandlers'
+import { userHandlers_createUser } from './requesthandlers/userHandlers'
 
 export const usersRouter_build = () => {
   const router = Router({ mergeParams: true })
-  router.post('/', userRequestHandlers_createUser)
+  router.post('/', userHandlers_createUser)
   return router
 }

@@ -1,10 +1,10 @@
 import { handleAsync } from '../../lib/handleAsync'
 import { IUser } from '../model/User'
 import { authenticationDataRepo_create } from '../../authenticationdata/repository/authenticationDataRepo'
-import { passwordHasher } from '../../security/passwordHasher'
+import { passwordHasher_hash } from '../../security/passwordHasher'
 import { userRepo_create } from '../repository/userRepo'
 import { Request } from 'express'
-import { session_getCurrentUserDataFromToken, session_createSession } from '../../session/session'
+import { session_createSession } from '../../session/session'
 import { IAuthenticationData } from '../../authenticationdata/model/AuthenticationData'
 
 const sanitizeCreateRequest = (request: Request) => {
@@ -18,11 +18,11 @@ const sanitizeCreateRequest = (request: Request) => {
 }
 
 const prepareAndCreateAuthenticationData = async (authenticationData: IAuthenticationData) => {
-  authenticationData.password = await passwordHasher.hash(authenticationData.password!)
+  authenticationData.password = await passwordHasher_hash(authenticationData.password!)
   return await authenticationDataRepo_create(authenticationData)
 }
 
-export const userRequestHandlers_createUser = handleAsync(async (request, response) => {
+export const userHandlers_createUser = handleAsync(async (request, response) => {
   const { userData, authenticationData } = sanitizeCreateRequest(request)
   userData.authenticationData = await prepareAndCreateAuthenticationData(authenticationData)
   const persistedUser = await userRepo_create(userData)
