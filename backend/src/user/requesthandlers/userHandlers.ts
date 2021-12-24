@@ -1,8 +1,11 @@
 import { handleAsync } from '../../lib/handleAsync'
 import { IUser } from '../model/User'
-import { authenticationDataRepo_create } from '../../authenticationdata/repository/authenticationDataRepo'
+import {
+  authenticationDataRepo_create,
+  authenticationDataRepo_findByEmail,
+} from '../../authenticationdata/repository/authenticationDataRepo'
 import { passwordHasher_hash } from '../../security/passwordHasher'
-import { userRepo_create } from '../repository/userRepo'
+import { userRepo_create, userRepo_findByAuthenticationData } from '../repository/userRepo'
 import { Request } from 'express'
 import { session_createSession } from '../../session/session'
 import { IAuthenticationData } from '../../authenticationdata/model/AuthenticationData'
@@ -22,12 +25,20 @@ const prepareAndCreateAuthenticationData = async (authenticationData: IAuthentic
   return await authenticationDataRepo_create(authenticationData)
 }
 
-export const userHandlers_createUser = handleAsync(async (request, response) => {
-  const { userData, authenticationData } = sanitizeCreateRequest(request)
+const userWithEmailExists = async (email: string) => {
+  const existingUser = await authenticationDataRepo_findByEmail(email)
+  return !!existingUser
+}
+
+export const userHandlers_createUser = handleAsync(async (req, res) => {
+  const { userData, authenticationData } = sanitizeCreateRequest(req)
+  if (await userWithEmailExists(authenticationData.email!)) {
+    return res.send({ authenticationData: { errors: { email: ['such user exists'] } } })
+  }
   userData.authenticationData = await prepareAndCreateAuthenticationData(authenticationData)
   const persistedUser = await userRepo_create(userData)
-  await session_createSession(response, persistedUser, userData.roles!)
+  await session_createSession(res, persistedUser, userData.roles!)
   const responseData: IUser = persistedUser.toObject()
   delete responseData.authenticationData
-  response.send(responseData)
+  res.send(responseData)
 })

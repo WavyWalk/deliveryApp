@@ -51,7 +51,12 @@ export class CreateAccountFormState extends SubscriptionState {
 
     try {
       this.setSubmitting(true)
-      await userClient.createAccount(this.user)
+      const responseUser = await userClient.createAccount(this.user)
+      if (!responseUser.validator.isValid()) {
+        this.user.replaceErrorsFrom(responseUser)
+        this.update()
+        return
+      }
       await sessionState.fetchCurrentUser()
       sessionState.navigateToUsersHomePage(navigate)
       this.update()
