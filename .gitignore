@@ -4,7 +4,7 @@
 /backend/node_modules
 /backend/.idea
 /backend/public/dist
-/backend/.docker/
+/backend/.docker/mongoVolume
 /frontend/yarn-error.log
 /backend/public/index.html
 /backend/public/index.html.gz
