@@ -36,6 +36,11 @@ const DelivererShipmentOrderList: FC = () => {
         </Box>
         {listState.isLoading && <LinearProgress />}
       </Box>
+      {!listState.noOrders && (
+        <Box>
+          <Typography sx={{ textAlign: 'center' }}>No orders found</Typography>
+        </Box>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -43,13 +48,6 @@ const DelivererShipmentOrderList: FC = () => {
           flexWrap: 'wrap'
         }}
       >
-        {!listState.noOrders && (
-          <Box>
-            <Typography sx={{ textAlign: 'center' }}>
-              No orders found
-            </Typography>
-          </Box>
-        )}
         {listState.shipmentOrders.map((shipmentOrder, index) => {
           return (
             <DelivererShipmentOrderListItem
