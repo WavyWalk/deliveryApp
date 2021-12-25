@@ -30,30 +30,35 @@ export class SenderShipmentOrderListState extends SubscriptionState {
     this.update()
   }
 
+  onSocketStatusUpdated = (shipmentOrderData: ShipmentOrder) => {
+    const updatedShipmentOrder = new ShipmentOrder(shipmentOrderData)
+    globalInfoToastsState.pushInfo(
+      `status of order #${updatedShipmentOrder._id} changed to ${shipmentOrderData.fulfillment?.currentState}`
+    )
+    const orderInList = this.shipmentOrders?.find(
+      (it) => it._id === updatedShipmentOrder._id
+    )
+    if (orderInList) {
+      orderInList.modelData = updatedShipmentOrder.modelData
+      console.log(orderInList)
+    }
+    this.update()
+  }
+
   listenSocketOnStatusUpdated = () => {
     socketConnectionManager.on(
       SocketEvents.SENDER_ORDER_WAS_UPDATED,
-      (shipmentOrderData: ShipmentOrder) => {
-        const updatedShipmentOrder = new ShipmentOrder(shipmentOrderData)
-        globalInfoToastsState.pushInfo(
-          `status of order #${updatedShipmentOrder._id} changed to ${shipmentOrderData.fulfillment?.currentState}`
-        )
-        const orderInList = this.shipmentOrders?.find(
-          (it) => it._id === updatedShipmentOrder._id
-        )
-        if (orderInList) {
-          orderInList.modelData = updatedShipmentOrder.modelData
-          console.log(orderInList)
-        }
-        this.update()
-      }
+      this.onSocketStatusUpdated
     )
   }
 
   useCleanup = () => {
     useEffect(() => {
       return () =>
-        socketConnectionManager.off(SocketEvents.SENDER_ORDER_WAS_UPDATED)
+        socketConnectionManager.off(
+          SocketEvents.SENDER_ORDER_WAS_UPDATED,
+          this.onSocketStatusUpdated
+        )
     }, [])
   }
 

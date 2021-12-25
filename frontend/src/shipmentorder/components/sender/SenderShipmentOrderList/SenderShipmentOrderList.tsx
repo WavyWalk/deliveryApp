@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import { Box, LinearProgress, Paper, Typography } from '@mui/material'
+import { Box, LinearProgress, Typography } from '@mui/material'
 import { SenderShipmentOrderListItem } from './SenderShipmentOrderListItem'
 import { ShipmentOrderFulfillment } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
 import { PlainSelect } from '../../../../formelements/plainselect/PlainSelect'
@@ -13,14 +13,14 @@ const SenderShipmentOrderList: FC = () => {
   listState.useCleanup()
 
   return (
-    <Paper>
+    <Box>
       <Box>
         <Typography sx={{ padding: 2.5, textAlign: 'center' }} variant={'h2'}>
           Your parcels
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <PlainSelect
-            sx={{ width: '100%', margin: 2 }}
+            sx={{ minWidth: '80%', margin: 2 }}
             label={'Filter by status'}
             model={listState.fulfillmentStateFilter}
             formState={listState}
@@ -36,7 +36,8 @@ const SenderShipmentOrderList: FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
+          justifyContent: 'space-around'
         }}
       >
         {listState.shipmentOrders.map((shipmentOrder, index) => {
@@ -48,7 +49,7 @@ const SenderShipmentOrderList: FC = () => {
           )
         })}
       </Box>
-    </Paper>
+    </Box>
   )
 }
 

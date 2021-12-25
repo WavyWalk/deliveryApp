@@ -30,9 +30,14 @@ export class CreateAccountFormState extends SubscriptionState {
     this.update()
   }
 
-  initializeRegisterAsDeliverer = () => {
-    this.user.roles = [UserRole.DELIVERY_AGENT]
-    this.user.personalData = new PersonalData()
+  toggleRoleMode = () => {
+    if (this.user.roles?.[0] === UserRole.SENDER) {
+      this.user.roles = [UserRole.DELIVERY_AGENT]
+      this.user.personalData = new PersonalData()
+    } else {
+      this.user.roles = [UserRole.SENDER]
+      this.user.personalData = undefined
+    }
     this.update()
   }
 
@@ -56,8 +61,10 @@ export class CreateAccountFormState extends SubscriptionState {
         this.update()
         return
       }
+
       await sessionState.fetchCurrentUser()
       sessionState.navigateToUsersHomePage(navigate)
+
       this.update()
     } finally {
       this.setSubmitting(false)

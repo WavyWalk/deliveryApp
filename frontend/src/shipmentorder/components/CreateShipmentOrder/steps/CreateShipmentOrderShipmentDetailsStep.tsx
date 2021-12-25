@@ -67,7 +67,7 @@ const CreateShipmentOrderShipmentDetailsStep: FC<{
         />
       </Box>
       <Box sx={sx.controlButtons}>
-        <Box>
+        <Box sx={{ marginRight: 2 }}>
           <Button variant={'outlined'} onClick={formState.goPreviousStep}>
             Go back
           </Button>

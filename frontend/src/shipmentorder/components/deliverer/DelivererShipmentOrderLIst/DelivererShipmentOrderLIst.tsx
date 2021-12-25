@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import { Box, LinearProgress, Paper, Typography } from '@mui/material'
+import { Box, LinearProgress, Typography } from '@mui/material'
 import { DelivererShipmentOrderListState } from './DelivererShipmentOrderListState'
 import { PlainSelect } from '../../../../formelements/plainselect/PlainSelect'
 import { nameOf } from '../../../../lib/typeutils/asKeyOf'
@@ -17,15 +17,15 @@ const DelivererShipmentOrderList: FC = () => {
   listState.useCleanup()
 
   return (
-    <Paper>
+    <Box>
       <Box>
         <DelivererNewShipmentAddedFromSocketDialog state={listState} />
         <Typography sx={{ padding: 2.5, textAlign: 'center' }} variant={'h2'}>
           Browse parcels
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <PlainSelect
-            sx={{ width: '100%', margin: 2 }}
+            sx={{ minWidth: '80%', margin: 2 }}
             label={'Filter by status'}
             model={listState.fulfillmentStateFilter}
             formState={listState}
@@ -45,7 +45,8 @@ const DelivererShipmentOrderList: FC = () => {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          flexWrap: 'wrap'
+          flexWrap: 'wrap',
+          justifyContent: 'space-around'
         }}
       >
         {listState.shipmentOrders.map((shipmentOrder, index) => {
@@ -57,7 +58,7 @@ const DelivererShipmentOrderList: FC = () => {
           )
         })}
       </Box>
-    </Paper>
+    </Box>
   )
 }
 

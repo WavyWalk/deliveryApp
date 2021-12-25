@@ -29,7 +29,7 @@ export const useShipmentStepSharedSx = () => {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    margin: theme.spacing(1, '30%')
+    margin: theme.spacing(1, 2)
   } as const
 
   const headline: SxProps = {

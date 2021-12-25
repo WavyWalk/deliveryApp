@@ -40,6 +40,7 @@ const SenderSidebar: FC<{
             to={sideBarItem.link}
             component={RouterLink}
             key={sideBarItem.text}
+            onClick={onSideBarToggle}
           >
             <ListItem button>
               <ListItemText primary={sideBarItem.text} />

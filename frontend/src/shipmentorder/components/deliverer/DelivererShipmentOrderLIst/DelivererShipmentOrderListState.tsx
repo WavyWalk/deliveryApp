@@ -71,7 +71,10 @@ export class DelivererShipmentOrderListState extends SubscriptionState {
   useCleanup = () => {
     useEffect(() => {
       return () => {
-        socketConnectionManager.off(SocketEvents.NEW_ORDER_WAS_ADDED)
+        socketConnectionManager.off(
+          SocketEvents.NEW_ORDER_WAS_ADDED,
+          this.onSocketShipmentOrderAddedEvent
+        )
       }
     }, [])
   }

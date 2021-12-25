@@ -9,8 +9,6 @@ export enum SocketEvents {
 export class SocketConnectionManager {
   socket?: Socket
 
-  activeListeners: { [key: string]: CallableFunction } = {}
-
   connect = (userId: string, roles?: string[]) => {
     connectionState.setConnectionStatus(SocketConnectionStatus.CONNECTING)
     this.socket = io('/', { query: { userId, role: roles?.[0] } })
@@ -36,14 +34,11 @@ export class SocketConnectionManager {
   }
 
   on = (event: string, eventHandler: (data: any) => void) => {
-    this.socket?.off(event)
     this.socket?.on(event, eventHandler)
-    this.activeListeners[event] = eventHandler
   }
 
-  off = (event: string) => {
-    this.socket?.off(event)
-    delete this.activeListeners[event]
+  off = (event: string, eventHandler: any) => {
+    this.socket?.off(event, eventHandler)
   }
 }
 

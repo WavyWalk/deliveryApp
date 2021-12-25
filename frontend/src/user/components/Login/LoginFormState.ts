@@ -49,7 +49,7 @@ export class LoginFormState extends SubscriptionState {
         this.authenticationData.replaceErrorsFrom(responseUser)
         return
       }
-      sessionState.setCurrentUser(responseUser)
+      await sessionState.fetchCurrentUser()
       sessionState.navigateToUsersHomePage(navigateFunc)
     } finally {
       this.setSubmitting(false)

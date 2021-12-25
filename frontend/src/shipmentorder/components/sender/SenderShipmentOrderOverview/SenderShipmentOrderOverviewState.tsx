@@ -34,24 +34,29 @@ export class SenderShipmentOrderOverviewState extends SubscriptionState {
     }
   }
 
+  onSocketStatusUpdated = (shipmentOrderData: ShipmentOrder) => {
+    const updatedShipmentOrder = new ShipmentOrder(shipmentOrderData)
+    globalInfoToastsState.pushInfo(
+      `status of this order was just changed to ${shipmentOrderData.fulfillment?.currentState}`
+    )
+    this.shipmentOrder = updatedShipmentOrder
+    this.update()
+  }
+
   listenSocketOnStatusUpdated = () => {
     socketConnectionManager.on(
       SocketEvents.SENDER_ORDER_WAS_UPDATED,
-      (shipmentOrderData: ShipmentOrder) => {
-        const updatedShipmentOrder = new ShipmentOrder(shipmentOrderData)
-        globalInfoToastsState.pushInfo(
-          `status of this order was just changed to ${shipmentOrderData.fulfillment?.currentState}`
-        )
-        this.shipmentOrder = updatedShipmentOrder
-        this.update()
-      }
+      this.onSocketStatusUpdated
     )
   }
 
   useCleanup = () => {
     useEffect(() => {
       return () =>
-        socketConnectionManager.off(SocketEvents.SENDER_ORDER_WAS_UPDATED)
+        socketConnectionManager.off(
+          SocketEvents.SENDER_ORDER_WAS_UPDATED,
+          this.onSocketStatusUpdated
+        )
     }, [])
   }
 }
