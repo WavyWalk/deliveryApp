@@ -3,6 +3,7 @@ import { sessionClient } from './clients/SessionClient'
 import { SubscriptionState } from '../lib/statemanagement'
 import { UserRole } from './model/UserRole'
 import { NavigateFunction } from 'react-router-dom'
+import { socketConnectionManager } from '../socketconnection/SocketConnectionManager'
 
 export class SessionState extends SubscriptionState {
   userFetched = false
@@ -40,6 +41,7 @@ export class SessionState extends SubscriptionState {
     if (!this.currentUser || this.isCurrentUserGuest()) {
       return
     }
+    socketConnectionManager.disconnect()
     this.currentUser = await sessionClient.logout()
     this.update()
     navigateFunc('/login')
@@ -50,6 +52,10 @@ export class SessionState extends SubscriptionState {
       this.setLoading(true)
       this.currentUser = await sessionClient.getLoggedInUserDetails()
       this.userFetched = true
+      const userId = this.currentUser?._id
+      if (userId) {
+        socketConnectionManager.connect(userId, this.currentUser?.roles)
+      }
       this.update()
     } finally {
       this.setLoading(false)

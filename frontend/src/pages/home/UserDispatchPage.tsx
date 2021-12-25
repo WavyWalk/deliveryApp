@@ -3,7 +3,7 @@ import { sessionState } from '../../user/SessionState'
 import { LinearProgress } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 
-const HomePage = () => {
+const UserDispatchPage = () => {
   const session = sessionState.use()
 
   useEffect(() => {
@@ -22,4 +22,4 @@ const HomePage = () => {
   )
 }
 
-export { HomePage }
+export { UserDispatchPage }

@@ -9,6 +9,7 @@ import { theme } from '../../../../theme/theme'
 
 const SenderShipmentOrderOverview: FC = () => {
   const state = useMemo(() => new SenderShipmentOrderOverviewState(), []).use()
+  state.useCleanup()
   const { shipmentOrderId } = useParams()
   const shipmentOrder = state.shipmentOrder
 

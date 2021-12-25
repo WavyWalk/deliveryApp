@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
-import { IUser } from '../user/model/User'
+import { IUser, User } from '../user/model/User'
 import { userRepo_findById } from '../user/repository/userRepo'
 
 const getSecret = () => {

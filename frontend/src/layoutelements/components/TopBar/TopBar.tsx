@@ -5,12 +5,15 @@ import MenuIcon from '@mui/icons-material/Menu'
 import AppBar from '@mui/material/AppBar'
 import * as React from 'react'
 import { TopBarLoginInfo } from '../../../user/components/TopBarLoginInfo/TopBarLoginInfo'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
+import { connectionState } from '../../../socketconnection/ConnectionState'
 
 const TopBar: FC<{
   sideBarWidth: number
   onSideBarToggle: () => void
 }> = ({ sideBarWidth, onSideBarToggle, children }) => {
+  connectionState.use()
+
   return (
     <AppBar
       position="fixed"
@@ -29,6 +32,9 @@ const TopBar: FC<{
         >
           <MenuIcon />
         </IconButton>
+        <Box>
+          <Typography>socket: {connectionState.connectionStatus}</Typography>
+        </Box>
         <Box sx={{ marginLeft: 'auto' }}>
           <TopBarLoginInfo />
         </Box>

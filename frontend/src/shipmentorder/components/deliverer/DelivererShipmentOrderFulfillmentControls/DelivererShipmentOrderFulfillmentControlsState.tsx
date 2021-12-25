@@ -21,10 +21,6 @@ export class DelivererShipmentOrderFulfillmentControlsState extends Subscription
     {
       text: 'delivered',
       value: FULFILLMENT_STATE.DELIVERED
-    },
-    {
-      text: 'delivery attempt failed',
-      value: FULFILLMENT_STATE.DELIVERY_ATTEMPT_FAILED
     }
   ]
 

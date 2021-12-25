@@ -6,6 +6,7 @@ import { nameOf } from '../../../../lib/typeutils/asKeyOf'
 import { ShipmentOrderFulfillment } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
 import { delivererOrderListFulfillmentFilterSelection } from './delivererOrderListFulfillmentFilterSelection'
 import { DelivererShipmentOrderListItem } from '../DelivererShipmentOrderListItem/DelivererShipmentOrderListItem'
+import { DelivererNewShipmentAddedFromSocketDialog } from '../DelivererNewShipmentAddedFromSocketDialog/DelivererNewShipmentAddedFromSocketDialog'
 
 const DelivererShipmentOrderList: FC = () => {
   const listState = useMemo(
@@ -13,9 +14,12 @@ const DelivererShipmentOrderList: FC = () => {
     []
   ).use()
 
+  listState.useCleanup()
+
   return (
     <Paper>
       <Box>
+        <DelivererNewShipmentAddedFromSocketDialog state={listState} />
         <Typography sx={{ padding: 2.5, textAlign: 'center' }} variant={'h2'}>
           Browse parcels
         </Typography>
