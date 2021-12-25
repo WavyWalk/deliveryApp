@@ -1,22 +1,12 @@
 import React, { FC, useMemo } from 'react'
-import {
-  Box,
-  Button,
-  LinearProgress,
-  Link,
-  Paper,
-  Typography
-} from '@mui/material'
+import { Box, LinearProgress, Paper, Typography } from '@mui/material'
 import { SenderShipmentOrderListItem } from './SenderShipmentOrderListItem'
-import { Link as RouterLink } from 'react-router-dom'
-import {
-  FULFILLMENT_STATE,
-  ShipmentOrderFulfillment
-} from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
+import { ShipmentOrderFulfillment } from '../../../../orderfullfillment/model/ShipmentOrderFulfillment'
 import { PlainSelect } from '../../../../formelements/plainselect/PlainSelect'
 import { nameOf } from '../../../../lib/typeutils/asKeyOf'
 import { SenderShipmentOrderListState } from './SenderShipmentOrderListState'
 import { fulfillmentFilterSelection } from './fulfillmentFilterSelection'
+import { SenderShipmentOrderListNoOrderDisclaimer } from './SenderShipmentOrderListNoOrderDisclaimer'
 
 const SenderShipmentOrderList: FC = () => {
   const listState = useMemo(() => new SenderShipmentOrderListState(), []).use()
@@ -40,6 +30,7 @@ const SenderShipmentOrderList: FC = () => {
           />
         </Box>
         {listState.isLoading && <LinearProgress />}
+        <SenderShipmentOrderListNoOrderDisclaimer listState={listState} />
       </Box>
       <Box
         sx={{
@@ -48,25 +39,6 @@ const SenderShipmentOrderList: FC = () => {
           flexWrap: 'wrap'
         }}
       >
-        {!listState.userHasOrders && (
-          <Box>
-            {listState.fulfillmentStateFilter.currentState ===
-            ('NO_FILTER' as FULFILLMENT_STATE) ? (
-              <>
-                <Typography sx={{ textAlign: 'center' }}>
-                  Looks like you don't have orders yet.
-                  <Link to={'/sender/createShipment'} component={RouterLink}>
-                    <Button>Create one!</Button>
-                  </Link>
-                </Typography>
-              </>
-            ) : (
-              <Typography sx={{ textAlign: 'center' }}>
-                No orders found
-              </Typography>
-            )}
-          </Box>
-        )}
         {listState.shipmentOrders.map((shipmentOrder, index) => {
           return (
             <SenderShipmentOrderListItem
