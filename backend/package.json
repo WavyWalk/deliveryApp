@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "backend:start": "yarn nodemon ./src/index.ts",
-    "both:dev": "yarn backend:start & cd ../frontend && yarn webpack watch"
+    "both:dev": "yarn backend:start & cd ../frontend && yarn webpack watch",
+    "installPackages": "yarn && cd ../frontend && yarn"
   },
   "dependencies": {
     "@typegoose/typegoose": "^9.4.0",
