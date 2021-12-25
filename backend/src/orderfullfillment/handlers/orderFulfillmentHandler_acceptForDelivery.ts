@@ -9,13 +9,16 @@ import {
 } from '../../shipmentorder/repository/shipmentOrderRepo'
 import { session_findCurrentUser } from '../../session/session'
 import { handleAsync } from '../../lib/handleAsync'
+import { app } from '../../App'
+import { socketRooms } from '../../sockets/SocketRooms'
+import { SocketEvents } from '../../sockets/socketEvents'
 
 const ensureDeliveryIsVacant = (fulfillment: ShipmentOrderFulfillment, deliveryAgent: User) => {
   if (!fulfillment.deliveryAgent?._id) {
     return
   }
 
-  if (fulfillment.deliveryAgent?._id !== deliveryAgent?._id) {
+  if (`${fulfillment.deliveryAgent?._id}` !== `${deliveryAgent?._id}`) {
     throw new RequestInvalidError()
   }
 }
@@ -59,5 +62,8 @@ export const orderFulfillmentHandler_acceptForDelivery = handleAsync(async (req,
   ensureDeliveryIsVacant(fulfillment, deliveryAgent)
   updatePropertiesForAcceptForDelivery(fulfillment, shipmentOrder, deliveryAgent)
   const updated = await shipmentOrderRepo_save(shipmentOrder)
+  app.socketServer
+    .to(socketRooms.getSenderWithId(updated.customer?._id!))
+    .emit(SocketEvents.SENDER_ORDER_WAS_UPDATED, (updated as any).toObject())
   return res.send(updated)
 })

@@ -2,10 +2,14 @@ import { SxProps } from '@mui/material'
 
 export const useCreateAccountSxStyles = () => {
   const card: SxProps = {
-    width: '60%',
+    width: { lg: '50%', xs: '100%' },
     position: 'absolute',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     top: '20%',
-    left: '25%'
+    left: 0,
+    right: 0,
+    textAlign: 'center'
   } as const
 
   const inputs: SxProps = {

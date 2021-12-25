@@ -20,6 +20,7 @@ import { fulfillmentFilterSelection } from './fulfillmentFilterSelection'
 
 const SenderShipmentOrderList: FC = () => {
   const listState = useMemo(() => new SenderShipmentOrderListState(), []).use()
+  listState.useCleanup()
 
   return (
     <Paper>

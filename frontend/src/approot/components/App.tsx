@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { HomePage } from '../../pages/home/HomePage'
+import { UserDispatchPage } from '../../pages/home/UserDispatchPage'
 import { Login } from '../../user/components/Login/Login'
 import { CreateAccount } from '../../user/components/CreateAccount/CreateAccount'
 import { SenderDashboard } from '../../user/components/senderdashboard/SenderDashboard'
@@ -12,6 +12,7 @@ import { DelivererDashboard } from '../../user/components/delivererdashboard/Del
 import { DelivererShipmentOrderOverview } from '../../shipmentorder/components/deliverer/DelivererShipmentOrderOverview/DelivererShipmentOrderOverview'
 import { LinearProgress, Typography } from '@mui/material'
 import { sessionState } from '../../user/SessionState'
+import { GlobalInfoToasts } from '../../infotoasts/GlobalInfoToasts'
 
 const App: FC = () => {
   const session = sessionState.use()
@@ -32,34 +33,43 @@ const App: FC = () => {
 
   return (
     <>
-      <Routes>
-        <Route path={'/'} element={<HomePage />} />
-        <Route path={'/404'} element={<Typography>Not found</Typography>} />
-        <Route path={'/403'} element={<Typography>Unauthorized</Typography>} />
-        <Route path={'/signUp'} element={<CreateAccount />} />
-        <Route path={'/login'} element={<Login />} />
-        <Route path={'/sender'} element={<SenderDashboard />}>
-          <Route path={'/sender'} element={<SenderShipmentOrderList />} />
+      <main>
+        <GlobalInfoToasts />
+        <Routes>
+          <Route path={'/'} element={<UserDispatchPage />} />
+          <Route path={'/404'} element={<Typography>Not found</Typography>} />
           <Route
-            path={'/sender/createShipment'}
-            element={<CreateShipmentOrder />}
+            path={'/403'}
+            element={<Typography>Unauthorized</Typography>}
           />
-          <Route
-            path={'/sender/shipments/:shipmentOrderId'}
-            element={<SenderShipmentOrderOverview />}
-          />
+          <Route path={'/signUp'} element={<CreateAccount />} />
+          <Route path={'/login'} element={<Login />} />
+          <Route path={'/sender'} element={<SenderDashboard />}>
+            <Route path={'/sender'} element={<SenderShipmentOrderList />} />
+            <Route
+              path={'/sender/createShipment'}
+              element={<CreateShipmentOrder />}
+            />
+            <Route
+              path={'/sender/shipments/:shipmentOrderId'}
+              element={<SenderShipmentOrderOverview />}
+            />
+            <Route path="*" element={<Navigate replace to="/404" />} />
+          </Route>
+          <Route path={'/deliverer'} element={<DelivererDashboard />}>
+            <Route
+              path={'/deliverer'}
+              element={<DelivererShipmentOrderList />}
+            />
+            <Route
+              path={'/deliverer/shipments/:shipmentOrderId'}
+              element={<DelivererShipmentOrderOverview />}
+            />
+            <Route path="*" element={<Navigate replace to="/404" />} />
+          </Route>
           <Route path="*" element={<Navigate replace to="/404" />} />
-        </Route>
-        <Route path={'/deliverer'} element={<DelivererDashboard />}>
-          <Route path={'/deliverer'} element={<DelivererShipmentOrderList />} />
-          <Route
-            path={'/deliverer/shipments/:shipmentOrderId'}
-            element={<DelivererShipmentOrderOverview />}
-          />
-          <Route path="*" element={<Navigate replace to="/404" />} />
-        </Route>
-        <Route path="*" element={<Navigate replace to="/404" />} />
-      </Routes>
+        </Routes>
+      </main>
     </>
   )
 }

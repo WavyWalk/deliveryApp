@@ -7,6 +7,9 @@ import { RequestInvalidError } from '../../errorhandling/errors/RequestInvalidEr
 import { ShipmentOrderFulfillment } from '../model/ShipmentOrderFulfillment'
 import { Request } from 'express'
 import { ShipmentOrder } from '../../shipmentorder/model/ShipmentOrder'
+import { app } from '../../App'
+import { socketRooms } from '../../sockets/SocketRooms'
+import { SocketEvents } from '../../sockets/socketEvents'
 
 async function prepareData(req: Request) {
   const updatedStatus: string = req.body.fulfillmentState
@@ -43,5 +46,8 @@ export const orderFulfillmentHandler_updateState = handleAsync(async (req, res) 
   assignFulfillmentEvents(fulfillment)
   updateFulfillmentProperties(updatedStatus, shipmentOrder)
   const updatedShipmentOrder = await shipmentOrderRepo_save(shipmentOrder)
+  app.socketServer
+    .to(socketRooms.getSenderWithId(updatedShipmentOrder.customer?._id!))
+    .emit(SocketEvents.SENDER_ORDER_WAS_UPDATED, (updatedShipmentOrder as any).toObject())
   res.send(updatedShipmentOrder)
 })

@@ -13,6 +13,10 @@ import {
   shipmentOrderRepo_findById,
   shipmentOrderRepo_findForDelivererWithCurrentState,
 } from '../repository/shipmentOrderRepo'
+import { UserRole } from '../../user/model/UserRole'
+import { app } from '../../App'
+import { SocketEvents } from '../../sockets/socketEvents'
+import { socketRooms } from '../../sockets/SocketRooms'
 
 const createBaseFulfillment = async () => {
   const fulfillmentData: IShipmentOrderFulfillment = {
@@ -25,11 +29,26 @@ const createBaseFulfillment = async () => {
   return fulfillmentData
 }
 
+const userHasRole = (user: { roles?: string[] } | null | undefined, userRole: UserRole) => {
+  if (!user) {
+    return false
+  }
+  const roles = user.roles ?? []
+  return roles.indexOf(userRole) > -1
+}
+
 export const shipmentOrderHandlers_create = handleAsync(async (req, res) => {
+  const currentUser = await session_findCurrentUser(req)
+  if (!userHasRole(currentUser, UserRole.SENDER)) {
+    return res.sendStatus(403)
+  }
   const shipmentOrder: IShipmentOrder = req.body
   shipmentOrder.fulfillment = (await createBaseFulfillment())!
-  shipmentOrder.customer = (await session_findCurrentUser(req))!
+  shipmentOrder.customer = currentUser!
   const createdShipmentOrder = await shipmentOrderRepo_create(shipmentOrder)
+  app.socketServer
+    .to(socketRooms.getAllDeliverer())
+    .emit(SocketEvents.NEW_ORDER_WAS_ADDED, createdShipmentOrder.toObject())
   res.send(createdShipmentOrder.toObject())
 })
 
@@ -50,10 +69,13 @@ export const shipmentOrderHandlers_getById = handleAsync(async (req, res) => {
 
 export const shipmentOrderHandlers_getForDeliverer = handleAsync(async (req, res) => {
   const filterState = req.query.filterFulfillmentState as string
+  const deliverer = await session_findCurrentUser(req)
+  if (!userHasRole(deliverer, UserRole.DELIVERY_AGENT)) {
+    res.sendStatus(403)
+  }
   if (filterState === 'NO_FILTER') {
     return res.send(await shipmentOrderRepo_findAllOpen())
   }
-  const deliverer = await session_findCurrentUser(req)
   if (filterState === 'ACCEPTED_BY_DELIVERER') {
     return res.send(await shipmentOrderRepo_findAcceptedByDeliverer(deliverer?._id))
   }

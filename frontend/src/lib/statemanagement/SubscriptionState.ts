@@ -1,7 +1,6 @@
-import { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react'
-import { sessionState } from '../../user/SessionState'
+import { useEffect, useMemo, useState } from 'react'
 
-type ISubscribeOptions<THIS_T> = {
+export type ISubscribeOptions<THIS_T> = {
   makeSnapshot?: (state: THIS_T) => any
   afterUnsubscribed?: () => any
   shouldUpdate?: (state: THIS_T, snapshot?: any) => boolean
@@ -80,7 +79,8 @@ export class SubscriptionState {
      * by react as new state (if just pass this, react ignore it because than this will be === this).
      * the update function for calling component be stored in corresponding entry and be called on update
      * */
-    const [{ state }, updateState] = useState({ state: this })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_, updateState] = useState({ state: this })
 
     const id = useMemo(() => {
       /** increment internal last key and return it */
@@ -88,7 +88,7 @@ export class SubscriptionState {
       /** will write entry with updateState func under generated key */
       this.subscribe(id, updateState, options)
       return id
-    }, [])
+    }, [this])
 
     /**
      * because use runs on each render, the entry of this object on state be updated with the version of state
